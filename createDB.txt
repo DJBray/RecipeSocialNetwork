@@ -1,0 +1,86 @@
+CREATE TABLE USERS(
+uid VARCHAR(30),
+pwd VARCHAR(45),
+PRIMARY KEY(uid))ENGINE = INNODB;
+
+CREATE TABLE IMAGES(
+uid VARCHAR(30),
+iid VARCHAR(30),
+i_length INT NOT NULL,
+image BLOB NOT NULL,
+PRIMARY KEY(iid),
+FOREIGN KEY(uid) REFERENCES USERS(uid))ENGINE = INNODB;
+
+CREATE TABLE PROFILE(
+uid VARCHAR(30),
+firstName VARCHAR(45),
+lastName VARCHAR(45),
+info VARCHAR(2000),
+birthday INT,
+iid VARCHAR(30),
+PRIMARY KEY(uid),
+FOREIGN KEY(uid) REFERENCES USERS(uid),
+FOREIGN KEY(iid) REFERENCES IMAGES(iid))ENGINE = INNODB;
+
+CREATE TABLE RECIPES(
+uid VARCHAR(30),
+recipeName VARCHAR(45),
+recipeDescription MEDIUMTEXT,
+recipeIngrediants MEDIUMTEXT,
+recipeSteps MEDIUMTEXT,
+rating INT default 3,
+numRatings INT default 0,
+iid VARCHAR(30),
+dateMade INT,
+PRIMARY KEY(uid, recipeName),
+FOREIGN KEY (uid) REFERENCES USERS(uid),
+FOREIGN KEY(iid) REFERENCES IMAGES(iid)) ENGINE = INNODB;
+
+CREATE TABLE COMMENTS(
+uid VARCHAR(30),
+recipeName VARCHAR(45),
+postTime INT,
+poster VARCHAR(30),
+comment MEDIUMTEXT,
+PRIMARY KEY(uid, recipeName, postTime))ENGINE = INNODB;
+
+CREATE TABLE MESSAGES(
+uid VARCHAR(30),
+messageId INT AUTO_INCREMENT,
+fromUser VARCHAR(30),
+subject VARCHAR(45),
+dateSent INT,
+message MEDIUMTEXT,
+PRIMARY KEY(messageId, uid),
+FOREIGN KEY(uid) REFERENCES USERS(uid))ENGINE = INNODB;
+
+CREATE TABLE FRIENDS(
+uid VARCHAR(30),
+friend VARCHAR(30),
+PRIMARY KEY(uid, friend),
+FOREIGN KEY (uid) REFERENCES USERS(uid),
+FOREIGN KEY (friend) REFERENCES USERS(uid))ENGINE = INNODB;
+
+
+INSERT INTO USERS VALUES('braydj', 'test');
+INSERT INTO USERS VALUES('yomomma', 'test');
+INSERT INTO USERS VALUES('joe', 'test');
+INSERT INTO USERS VALUES('ryan', 'test');
+
+INSERT INTO FRIENDS VALUES('braydj', 'yomomma');
+INSERT INTO FRIENDS VALUES('braydj', 'ryan');
+INSERT INTO FRIENDS VALUES('braydj', 'joe');
+INSERT INTO FRIENDS VALUES('joe', 'ryan');
+INSERT INTO FRIENDS VALUES('ryan', 'yomomma');
+
+INSERT INTO PROFILE VALUES('braydj', 'Dan', 'Bray', 'I love computer science. I particularly like databases ;)', 19920829, NULL);
+INSERT INTO PROFILE VALUES('yomomma', 'yo', 'momma', 'I am literally yo momma', 18000808, NULL);
+INSERT INTO PROFILE VALUES('joe', 'joe', 'shmo', 'I think cooking is average.', 19900812, NULL);
+INSERT INTO PROFILE VALUES('ryan', 'ryan', 'smith', 'Hello there! This is my profile info!', 20001020, NULL);
+
+INSERT INTO RECIPES(uid,recipeName,recipeDescription,recipeIngrediants,recipeSteps, iid, dateMade) VALUES('braydj', 'Sugar Cookies', 'Delicious sugar cookies that I know you are bound to love!', '1/2 cup sugar\n1/2 pound flour\n', '1) Make the dough\n2)Bake it\n3)Put on the sugar\n4)Enjoy!', NULL, 20101205);
+INSERT INTO RECIPES(uid,recipeName,recipeDescription,recipeIngrediants,recipeSteps, iid, dateMade) VALUES('yomomma', 'Sugar Cookies', 'Delicious sugar cookies that I know you are bound to love!', '1/2 cup sugar\n1/2 pound flour\n', '1) Make the dough\n2)Bake it\n3)Put on the sugar\n4)Enjoy!', NULL, 20101205);
+INSERT INTO RECIPES(uid,recipeName,recipeDescription,recipeIngrediants,recipeSteps, iid, dateMade) VALUES('joe', 'Sugar Cookies', 'Delicious sugar cookies that I know you are bound to love!', '1/2 cup sugar\n1/2 pound flour\n', '1) Make the dough\n2)Bake it\n3)Put on the sugar\n4)Enjoy!', NULL, 20101205);
+INSERT INTO RECIPES(uid,recipeName,recipeDescription,recipeIngrediants,recipeSteps, iid, dateMade) VALUES('ryan', 'Sugar Cookies', 'Delicious sugar cookies that I know you are bound to love!', '1/2 cup sugar\n1/2 pound flour\n', '1) Make the dough\n2)Bake it\n3)Put on the sugar\n4)Enjoy!', NULL, 20101205);
+
+INSERT INTO COMMENTS VALUES('braydj', 'Sugar Cookies', 20101010, 'ryan', 'THIS RECIPE IS AWESOME!!!');
